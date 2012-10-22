@@ -185,6 +185,8 @@ class Pass(object):
     
     def __init__(self, passInformation, json = '', passTypeIdentifier = '', organizationName = '', teamIdentifier = ''):
 
+        self.json = json # Instead of passing passInformation, passTypeIdentifier, organizationName, teamIdentifier
+
         self._files = {} # Holds the files to include in the .pkpass    
         self._hashes = {} # Holds the SHAs of the files array        
         
@@ -223,7 +225,7 @@ class Pass(object):
     
     # Creates the actual .pkpass file
     def create(self, certificate, key, wwdr_certificate, password, zip_file=None):
-        pass_json = self._createPassJson()
+        pass_json = self.json or self._createPassJson()
         manifest = self._createManifest(pass_json)
         signature = self._createSignature(manifest, certificate, key, wwdr_certificate, password)
         if not zip_file:
